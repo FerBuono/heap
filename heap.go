@@ -1,9 +1,5 @@
 package cola_prioridad
 
-import (
-	"fmt"
-)
-
 const _CAPACIDAD_INICIAL = 10
 const _VECES_A_AUMENTAR = 2
 const _VECES_A_REDUCIR = 2
@@ -38,7 +34,6 @@ func HeapSort[T comparable](elementos []T, funcion_cmp func(T, T) int) {
 	for i := len(elementos) - 1; i >= 0; i-- {
 		downheap(elementos, i, funcion_cmp, len(elementos)-1)
 	}
-	fmt.Println(elementos)
 	for i := 0; i < len(elementos); i++ {
 		elementos[0], elementos[len(elementos)-1-i] = elementos[len(elementos)-1-i], elementos[0]
 		downheap(elementos[:len(elementos)-1-i], 0, funcion_cmp, len(elementos)-1-i)
@@ -75,12 +70,9 @@ func (h *heap[T]) Desencolar() T {
 		h.redimensionar(cap(h.datos) / _VECES_A_REDUCIR)
 	}
 	dato := h.datos[0]
-	println("DATO ANTES", h.datos[0])
 	h.datos[0], h.datos[h.cantidad-1] = h.datos[h.cantidad-1], h.datos[0]
 	h.cantidad--
-	println("DATO MEDIO", h.datos[0])
 	downheap(h.datos, 0, h.cmp, h.cantidad)
-	println("DATO DESP", h.datos[0])
 	return dato
 }
 
