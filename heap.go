@@ -35,7 +35,7 @@ func HeapSort[T comparable](elementos []T, funcion_cmp func(T, T) int) {
 		downheap(elementos, i, funcion_cmp, len(elementos)-1)
 	}
 	for i := 0; i < len(elementos); i++ {
-		elementos[0], elementos[len(elementos)-1-i] = elementos[len(elementos)-1-i], elementos[0]
+		swap(&elementos[0], &elementos[len(elementos)-1-i])
 		downheap(elementos[:len(elementos)-1-i], 0, funcion_cmp, len(elementos)-1-i)
 	}
 }
@@ -70,7 +70,7 @@ func (h *heap[T]) Desencolar() T {
 		h.redimensionar(cap(h.datos) / _VECES_A_REDUCIR)
 	}
 	dato := h.datos[0]
-	h.datos[0], h.datos[h.cantidad-1] = h.datos[h.cantidad-1], h.datos[0]
+	swap(&h.datos[0], &h.datos[h.cantidad-1])
 	h.cantidad--
 	downheap(h.datos, 0, h.cmp, h.cantidad)
 	return dato
@@ -88,7 +88,7 @@ func upheap[T comparable](datos []T, pos_hijo int, func_cmp func(T, T) int) {
 	}
 	pos_padre := (pos_hijo - 1) / 2
 	if func_cmp(datos[pos_padre], datos[pos_hijo]) < 0 {
-		datos[pos_padre], datos[pos_hijo] = datos[pos_hijo], datos[pos_padre]
+		swap(&datos[pos_padre], &datos[pos_hijo])
 		upheap(datos, pos_padre, func_cmp)
 	}
 }
@@ -112,7 +112,7 @@ func downheap[T comparable](datos []T, pos_padre int, func_cmp func(T, T) int, c
 		return
 	}
 	if pos_reemplazo != pos_padre {
-		datos[pos_padre], datos[pos_reemplazo] = datos[pos_reemplazo], datos[pos_padre]
+		swap(&datos[pos_padre], &datos[pos_reemplazo])
 		downheap(datos, pos_reemplazo, func_cmp, cantDatos)
 	}
 }
@@ -132,7 +132,6 @@ func (h *heap[T]) redimensionar(nuevaCapacidad int) {
 	h.datos = nueva
 }
 
-/*
 func swap[T comparable](x, y *T) {
 	*x, *y = *y, *x
-}*/
+}
