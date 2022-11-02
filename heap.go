@@ -57,14 +57,14 @@ func (h *heap[T]) Encolar(elemento T) {
 
 func (h *heap[T]) VerMax() T {
 	if h.EstaVacia() {
-		panic("La cola está vacia")
+		panic("La cola esta vacia")
 	}
 	return h.datos[0]
 }
 
 func (h *heap[T]) Desencolar() T {
 	if h.EstaVacia() {
-		panic("La cola está vacia")
+		panic("La cola esta vacia")
 	}
 	if h.cantidad <= cap(h.datos)/_VALOR_PARA_REDUCIR && cap(h.datos) > _CAPACIDAD_INICIAL {
 		h.redimensionar(cap(h.datos) / _VECES_A_REDUCIR)
