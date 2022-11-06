@@ -21,7 +21,12 @@ func CrearHeap[T comparable](funcion_cmp func(T, T) int) ColaPrioridad[T] {
 
 func CrearHeapArr[T comparable](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[T] {
 	heap := new(heap[T])
-	heap.datos = arreglo
+	if len(arreglo) == 0 {
+		heap.datos = make([]T, _CAPACIDAD_INICIAL)
+	} else {
+		heap.datos = make([]T, len(arreglo))
+		copy(heap.datos, arreglo)
+	}
 	heap.cmp = funcion_cmp
 	heap.cantidad = len(arreglo)
 	for i := len(heap.datos) - 1; i >= 0; i-- {

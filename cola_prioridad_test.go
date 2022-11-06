@@ -69,6 +69,25 @@ func TestHeapArr(t *testing.T) {
 	require.Panics(t, func() { heap.Desencolar() })
 }
 
+func TestHeapArrVacio(t *testing.T) {
+	arr := []int{}
+	heap := TDAHeap.CrearHeapArr(arr, func(a, b int) int { return a - b })
+	require.Equal(t, 0, heap.Cantidad())
+	heap.Encolar(1)
+	heap.Encolar(3)
+	heap.Encolar(56)
+	heap.Encolar(2)
+	heap.Encolar(100)
+	heap.Encolar(10)
+	heap.Desencolar()
+	heap.Desencolar()
+	heap.Desencolar()
+	heap.Desencolar()
+	heap.Desencolar()
+	heap.Desencolar()
+	require.Equal(t, 0, heap.Cantidad())
+}
+
 func TestHeapSort(t *testing.T) {
 	ordenadoMerge := make([]int, 20)
 	ordenadoHeap := make([]int, 20)
