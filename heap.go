@@ -1,7 +1,5 @@
 package cola_prioridad
 
-import "math"
-
 const _CAPACIDAD_INICIAL = 10
 const _VECES_A_AUMENTAR = 2
 const _VECES_A_REDUCIR = 2
@@ -23,7 +21,7 @@ func CrearHeap[T comparable](funcion_cmp func(T, T) int) ColaPrioridad[T] {
 
 func CrearHeapArr[T comparable](arreglo []T, funcion_cmp func(T, T) int) ColaPrioridad[T] {
 	heap := new(heap[T])
-	heap.datos = make([]T, int(math.Max(float64(_CAPACIDAD_INICIAL), float64(len(arreglo)))))
+	heap.datos = make([]T, max(_CAPACIDAD_INICIAL, len(arreglo)))
 	copy(heap.datos, arreglo)
 	heap.cmp = funcion_cmp
 	heap.cantidad = len(arreglo)
@@ -139,4 +137,11 @@ func (h *heap[T]) redimensionar(nuevaCapacidad int) {
 
 func swap[T comparable](x, y *T) {
 	*x, *y = *y, *x
+}
+
+func max(valor1 int, valor2 int) int {
+	if valor1 > valor2 {
+		return valor1
+	}
+	return valor2
 }
