@@ -79,13 +79,14 @@ func TestHeapArrVacio(t *testing.T) {
 	heap.Encolar(2)
 	heap.Encolar(100)
 	heap.Encolar(10)
-	heap.Desencolar()
-	heap.Desencolar()
-	heap.Desencolar()
-	heap.Desencolar()
-	heap.Desencolar()
-	heap.Desencolar()
+	require.Equal(t, 100, heap.Desencolar())
+	require.Equal(t, 56, heap.Desencolar())
+	require.Equal(t, 10, heap.Desencolar())
+	require.Equal(t, 3, heap.Desencolar())
+	require.Equal(t, 2, heap.Desencolar())
+	require.Equal(t, 1, heap.Desencolar())
 	require.Equal(t, 0, heap.Cantidad())
+	require.True(t, heap.EstaVacia())
 }
 
 func TestHeapSort(t *testing.T) {
@@ -145,16 +146,19 @@ func TestHeapString(t *testing.T) {
 func TestHeapFuncionalidadVolumenMaximos(t *testing.T) {
 	heap := TDAHeap.CrearHeap(func(a, b int) int { return a - b })
 
-	for i := 0; i <= 3000; i++ {
-		heap.Encolar(i)
+	heap.Encolar(10000)
+	for i := 0; i < 3000; i++ {
+		heap.Encolar(rand.Intn(5000))
 	}
 
 	require.Equal(t, 3001, heap.Cantidad())
-	require.Equal(t, 3000, heap.VerMax())
+	require.Equal(t, 10000, heap.VerMax())
 	require.False(t, heap.EstaVacia())
 
-	for i := 3000; i >= 0; i-- {
-		require.Equal(t, i, heap.Desencolar())
+	previo := heap.Desencolar()
+	for i := 3000; i > 0; i-- {
+		require.True(t, heap.VerMax() <= previo)
+		previo = heap.Desencolar()
 	}
 
 	require.Zero(t, heap.Cantidad())
@@ -166,18 +170,19 @@ func TestHeapFuncionalidadVolumenMaximos(t *testing.T) {
 func TestHeapFuncionalidadVolumenMinimos(t *testing.T) {
 	heap := TDAHeap.CrearHeap(func(a, b int) int { return b - a })
 
-	for i := 0; i <= 3000; i++ {
-		heap.Encolar(i)
+	heap.Encolar(0)
+	for i := 0; i < 3000; i++ {
+		heap.Encolar(rand.Intn(5000))
 	}
 
 	require.Equal(t, 3001, heap.Cantidad())
 	require.Equal(t, 0, heap.VerMax())
 	require.False(t, heap.EstaVacia())
 
-	j := 0
-	for i := 3000; i >= 0; i-- {
-		require.Equal(t, j, heap.Desencolar())
-		j++
+	previo := heap.Desencolar()
+	for i := 3000; i > 0; i-- {
+		require.True(t, heap.VerMax() >= previo)
+		previo = heap.Desencolar()
 	}
 
 	require.Zero(t, heap.Cantidad())
@@ -190,16 +195,20 @@ func TestHeapArrVolumen(t *testing.T) {
 	arr := make([]int, 3001)
 
 	for i := 0; i <= 3000; i++ {
-		arr[i] = i
+		arr[i] = rand.Intn(5000)
 	}
+	arr[2000] = 10000
+
 	heap := TDAHeap.CrearHeapArr(arr, func(a, b int) int { return a - b })
 
 	require.Equal(t, 3001, heap.Cantidad())
+	require.Equal(t, 10000, heap.VerMax())
 
-	for i := 3000; i >= 0; i-- {
+	previo := heap.Desencolar()
+	for i := 0; i < 3000; i++ {
 		require.False(t, heap.EstaVacia())
-		require.Equal(t, i, heap.VerMax())
-		require.Equal(t, i, heap.Desencolar())
+		require.True(t, previo >= heap.VerMax())
+		previo = heap.Desencolar()
 	}
 
 	require.True(t, heap.EstaVacia())

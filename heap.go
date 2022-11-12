@@ -29,16 +29,12 @@ func CrearHeapArr[T comparable](arreglo []T, funcion_cmp func(T, T) int) ColaPri
 	}
 	heap.cmp = funcion_cmp
 	heap.cantidad = len(arreglo)
-	for i := len(heap.datos) - 1; i >= 0; i-- {
-		downheap(heap.datos, i, heap.cmp, heap.cantidad)
-	}
+	heapify(heap.datos, funcion_cmp)
 	return heap
 }
 
 func HeapSort[T comparable](elementos []T, funcion_cmp func(T, T) int) {
-	for i := len(elementos) - 1; i >= 0; i-- {
-		downheap(elementos, i, funcion_cmp, len(elementos)-1)
-	}
+	heapify(elementos, funcion_cmp)
 	for i := 0; i < len(elementos); i++ {
 		swap(&elementos[0], &elementos[len(elementos)-1-i])
 		downheap(elementos[:len(elementos)-1-i], 0, funcion_cmp, len(elementos)-1-i)
@@ -119,6 +115,12 @@ func downheap[T comparable](datos []T, pos_padre int, func_cmp func(T, T) int, c
 	if pos_reemplazo != pos_padre {
 		swap(&datos[pos_padre], &datos[pos_reemplazo])
 		downheap(datos, pos_reemplazo, func_cmp, cantDatos)
+	}
+}
+
+func heapify[T comparable](arr []T, func_cmp func(T, T) int) {
+	for i := len(arr) - 1; i >= 0; i-- {
+		downheap(arr, i, func_cmp, len(arr))
 	}
 }
 
